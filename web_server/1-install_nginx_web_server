@@ -1,5 +1,5 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
+# InstallNginx server
 # Update package list
 sudo apt-get update -y
 
