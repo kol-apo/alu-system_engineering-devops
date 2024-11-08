@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Update package list
+sudo apt-get update -y
+
+# Install Nginx
+sudo apt-get install nginx -y
+
+# Configure Nginx to return "Holberton School" in the root page
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.nginx-debian.html
+
+# Restart Nginx without using systemctl
+sudo service nginx restart
+
