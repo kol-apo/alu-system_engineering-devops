@@ -1,18 +1,13 @@
- #!/usr/bin/env bash
-# Commands to install Nginx on Web-Sever-01
+#!/usr/bin/env bash
+# Install NGINX and configure it to show "Holberton School" at the root
 
-# Updating Packages before making Installations
-sudo apt-get update
-sudo apt-get -y install nginx
+# Update package list and install NGINX without prompts
+sudo apt-get update -y
+sudo apt-get install nginx -y
 
-# Configuring the Uncomplicated Firewall (UFW) to allow incoming traffic for the Nginx HTTP service
-sudo ufw allow 'Nginx HTTP'
-
-# Creating an index.html page
+# Create or modify the index.html to display "Holberton School"
 echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Testing Nginx configurations for Syntax errors
-sudo nginx -t
-
-# Restarting Nginx
-sudo service nginx start
+# Ensure NGINX is listening on port 80 (default for NGINX)
+# Restart NGINX without systemctl
+sudo service nginx restart
