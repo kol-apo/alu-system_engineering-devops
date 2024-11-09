@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# Install NGINX and configure it to show "Holberton School" at the root
+# Install nginx on web-01 server, listening on port 80 (default),
+# and return a page that contains the expected output string
 
-# Update package list and install NGINX without prompts
-sudo apt-get update -y
-sudo apt-get install nginx -y
+sudo apt-get -y update
+sudo apt-get -y install nginx
+ufw allow 80
 
-# Create or modify the index.html to display "Holberton School"
-echo "Holberton School" | sudo tee /var/www/html/index.html
-
-# Ensure NGINX is listening on port 80 (default for NGINX)
-# Restart NGINX without systemctl
-sudo service nginx restart
+# reassign ownership to user acct so that they can be writeable
+sudo chown -R "$USER":"$USER"  /var/www/html
+echo "Holberton School" > /var/www/html/index.html
