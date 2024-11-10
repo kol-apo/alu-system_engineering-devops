@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
-# Install nginx on web-01 server, listening on port 80 (default),
-# and return a page that contains the expected output string
+# Configuring Nginx server so that /redirect_me is redirecting to another page.
 
 sudo apt-get -y update
 sudo apt-get -y install nginx
-ufw allow 80
 
-# reassign ownership to user acct so that they can be writeable
-sudo chown -R "$USER":"$USER"  /var/www/html
-echo "Hello World!" > /var/www/html/index.html
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# redirect "301 move permanently"
-new_config="rewrite ^/redirect_me$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;"
-sed -i "51 i $new_config" /etc/nginx/sites-available/default
-service nginx start
+# Redirection configuration
+replacement="server_name _;\\
+    location /redirect_me {\\
+        return 301 https://github.com/Maaxboon/;\\
+    }"
+sudo sed -i "s|server_name _;|$replacement|" /etc/nginx/sites-available/default
+
+sudo nginx -t
+sudo service nginx restart
