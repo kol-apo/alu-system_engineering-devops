@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # This script sets up Nginx with a custom header and ensures the hostname is in place
 
 # Exit on error
