@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/env bash
 # Starting Apache
 service apache2 start
@@ -10,16 +9,3 @@ else
     echo "Failed to start apache2"
     exit 1
 fi
-=======
-#!/usr/bin/env bash
-# Starting Apache
-service apache2 start
-
-# Check if Apache is running
-if service apache2 status | grep -q "running"; then
-    echo "apache2 is running"
-else
-    echo "Failed to start apache2"
-    exit 1
-fi
->>>>>>> 6e3be96b2fcaf5b0cf292472246ddde487a384d3
