@@ -1,20 +1,28 @@
 #!/usr/bin/env bash
-# This script sets up Nginx with a custom header and ensures the hostname is in place
+# Bash script that configures a new Ubuntu machine nginx
+# Configuring Nginx HTTP response header
 
-# Exit on error
-set -e
+sudo apt-get -y update
+sudo apt-get -y install nginx
+ufw allow  'Nginx HTTP'
 
-# Install Nginx
-apt update
-apt install -y nginx
+sudo echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Configure custom header in Nginx
-NGINX_CONFIG="/etc/nginx/sites-available/default"
+# redirection config
+replacement="server_name _;\\
+    rewrite ^/redirect_me https://github.com permanent;"
+sudo sed -i "s|server_name _;|$replacement|" /etc/nginx/sites-available/default
 
-# Add the X-Served-By custom header with the hostname value
-if ! grep -q "add_header X-Served-By" $NGINX_CONFIG; then
-    sed -i '/location \/ {/a \        add_header X-Served-By \"$HOSTNAME\";' $NGINX_CONFIG
-fi
+#creating 404 error page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+page="listen 80 default_server;\\n\\terror_page 404 /404.html;\\n\\tlocation = /404.html {\\n\\t\\troot /var/www/html;\\n\\t\\tinternal;\\n\\t}"
+sudo sed -i "s|listen 80 default_server;|$page|" /etc/nginx/sites-available/default
 
-# Restart Nginx to apply changes
-systemctl restart nginx
+
+# Creating an HTTP response header
+sudo sed -i "/server_name _/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-available/default
+
+
+# config testing and starting
+sudo nginx -t
+sudo service nginx start
