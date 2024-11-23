@@ -1,33 +1,20 @@
 #!/usr/bin/env bash
-#Updates the current state of the server
-#Installs Nginx on the server
-#Changes the user and user group ownership for editing file
-#overwrites the default page of nginx
-#overwrites the default configuration file default
-#add a redirection and a location for the redirection
-#restarts nginx
-apt-get -y update
-apt-get install -y nginx
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chown -R "$USER":"$USER" /etc/nginx/sites-available/default
-echo "Holberton School for the win!" > /var/www/html/index.html
-echo "Ceci n'est pas une page" > /var/www/html/404.html
-echo "server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-	root /var/www/html;
-	index index.html index.htm 404.html index.nginx-debian.html;
-	server_name _;
-	add_header X-Served-By $HOSTNAME;
-	location /redirect_me {
-		return 301 https://www.youtube.com/watch?v=-VGIt10m9VQ;
-	}
-	location /xyz {
-		return 404;
-	}
-	error_page 404 /404.html;
-}" > /etc/nginx/sites-available/default
-sudo chown -R root:root /var/www/html
-sudo chown -R root:root /etc/nginx/sites-available/default
-sudo service nginx restart
-sudo service nginx reload
+# This script sets up Nginx with a custom header and ensures the hostname is in place
+
+# Exit on error
+set -e
+
+# Install Nginx
+apt update
+apt install -y nginx
+
+# Configure custom header in Nginx
+NGINX_CONFIG="/etc/nginx/sites-available/default"
+
+# Add the X-Served-By custom header with the hostname value
+if ! grep -q "add_header X-Served-By" $NGINX_CONFIG; then
+    sed -i '/location \/ {/a \        add_header X-Served-By \"$HOSTNAME\";' $NGINX_CONFIG
+fi
+
+# Restart Nginx to apply changes
+systemctl restart nginx
